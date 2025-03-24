@@ -58,14 +58,15 @@ export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+  const { storeId } = await params;
   try {
-    if (!params.storeId) {
+    if (!storeId) {
       return new NextResponse("Missing storeId", { status: 400 });
     }
 
     const colors = await prismadb.color.findMany({
       where: {
-        storeId: params.storeId,
+        storeId: storeId,
       },
     });
 

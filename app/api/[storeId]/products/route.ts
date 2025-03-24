@@ -6,6 +6,7 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+  const { storeId } = await params;
   try {
     const { userId } = await auth();
     const body = await req.json();
@@ -48,13 +49,13 @@ export async function POST(
       return new NextResponse("Color ID is required", { status: 400 });
     }
 
-    if (!params.storeId) {
+    if (!storeId) {
       return new NextResponse("Missing storeId", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
-        id: params.storeId,
+        id: storeId,
         userId,
       },
     });
@@ -73,7 +74,7 @@ export async function POST(
 
         isFeatured,
         isArchived,
-        storeId: params.storeId,
+        storeId: storeId,
         images: {
           createMany: {
             data: [...images.map((image: { url: string }) => image)],
@@ -93,6 +94,7 @@ export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+  const { storeId } = await params;
   try {
     const { searchParams } = new URL(req.url);
     const categoryId = searchParams.get("categoryId") || undefined;
@@ -100,13 +102,13 @@ export async function GET(
     const sizeId = searchParams.get("sizeId") || undefined;
     const isFeatured = searchParams.get("sizeId") || undefined;
 
-    if (!params.storeId) {
+    if (!storeId) {
       return new NextResponse("Missing storeId", { status: 400 });
     }
 
     const products = await prismadb.product.findMany({
       where: {
-        storeId: params.storeId,
+        storeId: storeId,
         categoryId,
         sizeId,
         colorId,
