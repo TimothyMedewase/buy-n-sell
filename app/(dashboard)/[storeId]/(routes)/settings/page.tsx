@@ -8,6 +8,7 @@ interface SettingsPageProps {
 }
 
 const SettingsPage = async ({ params }: SettingsPageProps) => {
+  const { storeId } = await params;
   const { userId } = await auth();
 
   if (!userId) {
@@ -16,7 +17,7 @@ const SettingsPage = async ({ params }: SettingsPageProps) => {
 
   const store = await prismadb.store.findFirst({
     where: {
-      id: params.storeId,
+      id: storeId,
       userId: userId,
     },
   });

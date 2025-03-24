@@ -6,6 +6,7 @@ export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+  const { storeId } = await params;
   try {
     const { userId } = await auth();
     const body = await req.json();
@@ -24,13 +25,13 @@ export async function POST(
       return new NextResponse("Value is required", { status: 400 });
     }
 
-    if (!params.storeId) {
+    if (!storeId) {
       return new NextResponse("Missing storeId", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
       where: {
-        id: params.storeId,
+        id: storeId,
         userId,
       },
     });
@@ -43,7 +44,7 @@ export async function POST(
       data: {
         name,
         value,
-        storeId: params.storeId,
+        storeId: storeId,
       },
     });
 
@@ -58,14 +59,15 @@ export async function GET(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
+  const { storeId } = await params;
   try {
-    if (!params.storeId) {
+    if (!storeId) {
       return new NextResponse("Missing storeId", { status: 400 });
     }
 
     const sizes = await prismadb.size.findMany({
       where: {
-        storeId: params.storeId,
+        storeId: storeId,
       },
     });
 
