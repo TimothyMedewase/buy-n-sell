@@ -2,10 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { billboardId: string } }
-) {
+type paramsType = Promise<{ storeId: string; billboardId: string }>;
+export async function GET(req: Request, { params }: { params: paramsType }) {
   const { billboardId } = await params;
   try {
     if (!billboardId) {
@@ -25,10 +23,7 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
-) {
+export async function PATCH(req: Request, { params }: { params: paramsType }) {
   const { storeId, billboardId } = await params;
   try {
     const { userId } = await auth();
@@ -79,10 +74,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { storeId: string; billboardId: string } }
-) {
+export async function DELETE(req: Request, { params }: { params: paramsType }) {
   const { storeId, billboardId } = await params;
   try {
     const { userId } = await auth();

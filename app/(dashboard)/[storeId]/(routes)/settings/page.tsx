@@ -3,11 +3,9 @@ import { redirect } from "next/navigation";
 import prismadb from "@/lib/prismadb";
 import SettingsForm from "./components/settings-form";
 
-interface SettingsPageProps {
-  params: { storeId: string };
-}
+type paramsType = Promise<{ storeId: string }>;
 
-const SettingsPage = async ({ params }: SettingsPageProps) => {
+const SettingsPage = async ({ params }: { params: paramsType }) => {
   const { storeId } = await params;
   const { userId } = await auth();
 
